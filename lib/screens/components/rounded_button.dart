@@ -20,7 +20,7 @@ class RoundedButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         child: MaterialButton(
           onPressed: () {
-            //Go to login screen.
+            //Go to Another screen.
             onPress();
           },
           minWidth: 200.0,
