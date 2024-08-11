@@ -2,6 +2,7 @@ import 'package:chat_app/screens/chat_screen.dart';
 import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/screens/registration_screen.dart';
 import 'package:chat_app/screens/welcome_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -14,15 +15,25 @@ void main() async {
           appId: '1:380830881880:android:0f18981fbf6962d7f5522d',
           messagingSenderId: '380830881880',
           projectId: 'chat-app-flutter-56aff'));
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  StatefulWidget isSignedIn() {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return WelcomeScreen();
+    } else {
+      return const ChatScreen();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Chat App',
-      home: WelcomeScreen(),
+      home: isSignedIn(),
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
