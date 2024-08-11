@@ -1,6 +1,7 @@
+import 'package:chat_app/screens/chat_screen.dart';
 import 'package:chat_app/screens/components/rounded_button.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,6 +11,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _auth = FirebaseAuth.instance;
+
+  late String email;
+  late String pwd;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,21 +36,27 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 48.0,
             ),
             TextField(
+              keyboardType: TextInputType.emailAddress,
+              textAlign: TextAlign.center,
               onChanged: (value) {
                 //Do something with the user input.
+                email = value;
               },
               decoration:
-                  kTextFieldDecoration.copyWith(labelText: 'Enter your email.'),
+                  kTextFieldDecoration.copyWith(hintText: 'Enter your email.'),
             ),
             SizedBox(
               height: 8.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              obscureText: true,
               onChanged: (value) {
                 //Do something with the user input.
+                pwd = value;
               },
               decoration: kTextFieldDecoration.copyWith(
-                  labelText: 'Enter your password.'),
+                  hintText: 'Enter your password.'),
             ),
             SizedBox(
               height: 24.0,
@@ -53,8 +64,15 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
                 color: Colors.lightBlueAccent,
                 text: 'Log In',
-                onPress: () {
+                onPress: () async {
                   //Implement login functionality.
+                  await _auth.signInWithEmailAndPassword(
+                      email: email, password: pwd);
+                  if (_auth.currentUser != null) {
+                    Navigator.popAndPushNamed(context, ChatScreen.id);
+                  } else {
+                    print("Error Wrong Email and pwd !!");
+                  }
                 }),
           ],
         ),
