@@ -1,4 +1,5 @@
 import 'package:chat_app/screens/registration_screen.dart';
+import 'package:chat_app/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: () {
                 //Implement logout functionality
                 _auth.signOut();
-                Navigator.popAndPushNamed(context, RegistrationScreen.id);
+                Navigator.popAndPushNamed(context, WelcomeScreen.id);
               }),
         ],
         title: Text('⚡️Chat'),
