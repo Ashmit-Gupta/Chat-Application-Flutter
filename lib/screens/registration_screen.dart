@@ -24,7 +24,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
+          children: [
             Hero(
               tag: 'logo',
               child: SizedBox(

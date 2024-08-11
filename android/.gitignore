@@ -11,4 +11,6 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+#added json for not tracking
 app/google-services.json
