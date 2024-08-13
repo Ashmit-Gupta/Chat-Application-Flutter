@@ -69,7 +69,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 color: Colors.blueAccent,
                 text: 'Register',
                 onPress: () async {
-                  //Implement registration functionality.
+                  //registration functionality.
+                  setState(() {
+                    showSpinner = true;
+                  });
                   print(email);
                   print(pwd);
                   try {
@@ -83,7 +86,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           "Error in the registration Screen , unable to create user ");
                     }
                     setState(() {
-                      showSpinner = true;
+                      showSpinner = false;
                     });
                   } catch (e) {
                     print(e);

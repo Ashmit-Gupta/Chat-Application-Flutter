@@ -70,6 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'Log In',
                 onPress: () async {
                   //Implement login functionality.
+                  setState(() {
+                    showSpinner = true;
+                  });
                   showSpinner = true;
                   await _auth.signInWithEmailAndPassword(
                       email: email, password: pwd);
