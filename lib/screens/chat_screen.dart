@@ -1,5 +1,3 @@
-import 'package:chat_app/screens/registration_screen.dart';
-import 'package:chat_app/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,8 +73,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     final messageSender = message['sender'];
                     messageWidget.add(Text("$messageText from $messageSender"));
                   }
-                  return Column(
-                    children: messageWidget,
+                  return Expanded(
+                    child: ListView(
+                      children: messageWidget,
+                    ),
                   );
                 } else {
                   print("ERROR ${snapshot.hasError}");
