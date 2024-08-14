@@ -1,3 +1,6 @@
+import 'package:chat_app/screens/components/message_bubble.dart';
+import 'package:chat_app/screens/components/messages_stream.dart';
+import 'package:chat_app/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,25 +10,27 @@ import '../constants.dart';
 class ChatScreen extends StatefulWidget {
   static String id = "chat_screen";
 
-  const ChatScreen({super.key});
+  ChatScreen({super.key});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   late String messageText;
-  final _firestore = FirebaseFirestore.instance;
+  final messageTextController = TextEditingController();
 
-  Future<dynamic> getMessage() async {
-    final messages = await _firestore.collection('messages').get();
-    for (var message in messages.docs) {
-      print("sender : ${message.data()["sender"]}");
-      print("text : ${message.data()["text"]}");
-    }
-  }
+  /* Future<dynamic> getMessage() async {
+       final messages = await _firestore.collection('messages').get();
+       for (var message in messages.docs) {
+         print("sender : ${message.data()["sender"]}");
+         print("text : ${message.data()["text"]}");
+       }
+   }
+  */
 
-  void messagesStream() async {
+  /*void messagesStream() async {
     //Notifies of query results at this location.
     await for (var snapshot in _firestore.collection("messages").snapshots()) {
       print(
@@ -36,6 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     }
   }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +54,10 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: Icon(Icons.close),
               onPressed: () {
                 // logout functionality
-                // _auth.signOut();
-                // Navigator.popAndPushNamed(context, WelcomeScreen.id);
+                _auth.signOut();
+                Navigator.popAndPushNamed(context, WelcomeScreen.id);
                 // getMessage();
-                messagesStream();
+                // messagesStream();
               }),
         ],
         title: Text('⚡️Chat'),
@@ -62,32 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection("messages").snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final messages = snapshot.data!.docs;
-                  List<Text> messageWidget = [];
-                  for (var message in messages) {
-                    final messageText = message['text'];
-                    final messageSender = message['sender'];
-                    messageWidget.add(Text("$messageText from $messageSender"));
-                  }
-                  return Expanded(
-                    child: ListView(
-                      children: messageWidget,
-                    ),
-                  );
-                } else {
-                  print("ERROR ${snapshot.hasError}");
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.redAccent,
-                  ),
-                );
-              },
-            ),
+            MessagesStream(),
             // StreamBuilder<QuerySnapshot>(
             //   stream: _firestore.collection("messages").snapshots(),
             //   builder: (context, snapshot) {
@@ -122,11 +103,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       onChanged: (value) {
                         messageText = value;
                       },
+                      controller: messageTextController,
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
                     onPressed: () {
+                      messageTextController.clear();
                       //sending the message and the Email to cloud Firestore.
                       _firestore.collection('messages').add({
                         'text': messageText,
