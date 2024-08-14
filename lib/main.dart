@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     if (FirebaseAuth.instance.currentUser == null) {
       return WelcomeScreen();
     } else {
-      return const ChatScreen();
+      return ChatScreen();
     }
   }
 
